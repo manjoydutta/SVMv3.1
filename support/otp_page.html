@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css2.css">
+    <link rel="stylesheet" href="otp_page.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>OTP</title>
+</head>
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+          <img src="https://ecisveep.nic.in/uploads/monthly_2018_04/large.eci-logo.png.3923b99226a762b9e37469d762c31a77.png" width="30" height="30" class="d-inline-block align-top" alt="">
+          Smart Voting Platform
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Candidate Info</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="cast_vote.html">Cast Vote</a>
+            </li>
+          </ul>
+          <span class="navbar-text">
+            Welcome,&nbsp;<span class="user-id" id="voter-id"></span>&nbsp;&nbsp;
+          </span>
+          <button class="btn-style logout" id='log-out-btn'>Log out</button>
+        </div>
+    </nav>
+    <div class="instructions">
+        Process for Online Voting<br><br>
+        1. Enter Your mobile number linked with your Aadhaar Card.<br>
+        2. Click on the check button of captcha verification.<br>
+        3. Click on send button.<br>
+        4. Enter the OTP received on your registered mobile number and click on verify button.<br><br>
+        Once your verification is successful, the voting page will open. You can then cast your vote by clicking the desired party image and clicking the vote button.<br>
+    </div>
+    <div class="user-container">
+        <div id="sender">
+			<input type="text" id="number" placeholder="+91...">
+			<div id="recaptcha-container"></div>
+			<input type="button" id="send" value="Send" onClick="phoneAuth()">
+		</div>
+		<div id="verifier" style="display: none">
+			<input type="text" id="verificationcode" placeholder="OTP Code">
+			<input type="button" id="verify" value="Verify" onClick="codeverify()">
+			<div class="p-conf">Number Verified</div>
+			<div class="n-conf">OTP ERROR</div>
+		</div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col">
+                    <h4>About</h4>
+                    <ul>
+                        <li><a href="#">about us</a></li>
+                        <li><a href="#">our services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Other Projects</h4>
+                    <ul>
+                        <li><a href="#">Face Detection</a></li>
+                        <li><a href="#">Digital CVs</a></li>
+                        <li><a href="#">Jarvis</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col names">
+                    <h4>Group members</h4>
+                    <ul>
+                        <li><span title="Click to Send an E-mail"><a href="mailto:manjoydutta21@gmail.com?cc=smart.voting.grp12@gmail.com&subject=Feedback/Contact&body=Your%20Contact%20Info%20or%20Message%20to%20Us">Manjoy Dutta</a></span></li>
+                        <li><span title="Click to Send an E-mail"><a href="mailto:a@gmail.com?cc=smart.voting.grp12@gmail.com&subject=Feedback/Contact&body=Your%20Contact%20Info%20or%20Message%20to%20Us">Tiyasa Chakraborty</a></span></li>
+                        <li><span title="Click to Send an E-mail"><a href="mailto:b@gmail.com?cc=smart.voting.grp12@gmail.com&subject=Feedback/Contact&body=Your%20Contact%20Info%20or%20Message%20to%20Us">Deeshani Chaudhuri</a></span></li>
+                        <li><span title="Click to Send an E-mail"><a href="mailto:c@gmail.com?cc=smart.voting.grp12@gmail.com&subject=Feedback/Contact&body=Your%20Contact%20Info%20or%20Message%20to%20Us">Avik Mandol</a></span></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>follow us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <p class="footer_copy">&#169;2023 Designed by TDMA Technologies. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- <script src="otp_page.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
+    <script>
+
+    const user = sessionStorage.getItem("user");
+    const logged_in_user = document.querySelector("#voter-id");
+    logged_in_user.textContent = user;
+    document.getElementById('log-out-btn').addEventListener('click',function(){
+          location.replace("../index.html");});
+    
+
+    const firebaseConfig = {
+    	apiKey: "AIzaSyDNgWYRezi22VQUbkEFW3NyWzVqWIyQYl8",
+    	authDomain: "otp-7747d.firebaseapp.com",
+    	projectId: "otp-7747d",
+    	storageBucket: "otp-7747d.appspot.com",
+    	messagingSenderId: "972921190077",
+    	appId: "1:972921190077:web:22bc5da0fc47653b8f69d4",
+    	measurementId: "G-8F7T61XEEL"
+    };
+    firebase.initializeApp(firebaseConfig);
+    render();
+    function render(){
+    	window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+    	recaptchaVerifier.render();
+    }
+    function phoneAuth(){
+    	var number = document.getElementById('number').value;
+    	firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function(confirmationResult){
+    		window.confirmationResult = confirmationResult;
+    		coderesult = confirmationResult;
+    		document.getElementById('sender').style.display = 'none';
+    		document.getElementById('verifier').style.display = 'block';
+    	}).catch(function(error){
+    		alert(error.message);
+    	});
+    }
+    function codeverify(){
+    	var code = document.getElementById('verificationcode').value;
+    	coderesult.confirm(code).then(function(){
+    		// document.getElementsByClassName('p-conf')[0].style.display = 'block';
+    		// document.getElementsByClassName('n-conf')[0].style.display = 'none';
+            location.replace("cast_vote.html");
+    	}).catch(function(){
+    		document.getElementsByClassName('p-conf')[0].style.display = 'none';
+    		document.getElementsByClassName('n-conf')[0].style.display = 'block';
+    	})
+    }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
