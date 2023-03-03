@@ -4,7 +4,7 @@
 	position: absolute;
 	left: 0px;
 	right: 0px;
-	top: 250px;
+	top: 300px;
 	bottom: 0px;
 	margin: auto;
 }
@@ -17,7 +17,7 @@
 .footer{
     position: static;
     margin-top: auto;
-    margin-top: 45vh;
+    margin-top: 42vh;
     background-color: #24262b;
     padding: 70px 0 25px;
 }
